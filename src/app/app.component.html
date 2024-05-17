@@ -1,0 +1,9 @@
+<h1> {{ title }} </h1>
+<nav> 
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/heroes"> Heroes </a>
+</nav>
+
+
+<router-outlet> </router-outlet> <!-- When we change path to heroes, this displays the HeroesComponent; essentially a placeholder until users put a path that is valid in the URL -->
+<app-messages></app-messages>
