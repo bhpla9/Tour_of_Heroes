@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { MessageService } from '../message.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+// Allows you to access the http methods - get, put, post etc
 import { catchError, map, tap } from 'rxjs/operators';
 
 
@@ -20,8 +21,9 @@ export class HeroService {
 getHeroes(): Observable<Hero[]> {
   return this.http.get<Hero[]>(this.heroesUrl) // Getting heroes from server -- expects it to be an array of Heroes
     .pipe( // .pipe ot make a chain of operators 
-      tap(_ => this.log('fetched heroes')), // tap can perform on the emitted values but not modify them
+      tap(_ => this.log('fetched heroes')), // tap can perform on the emitted values but not modify them 
       catchError(this.handleError<Hero[]>('getHeroes', [])) // This intercepts an observable that has failed and returns an empty array as a fallback
+      //'getHeroes' is a string that acts as an identifier or a label for the operation - it helps to know which operation failed
     ) 
 }
 
@@ -69,6 +71,18 @@ deleteHero(id: number): Observable<Hero> { // remove hero from server - DELETE
   );
 }
 
+searchHeroes(term: string): Observable<Hero[]> {
+  if (!term.trim()) {
+    return of([]); // returns empty error if there's no search term
+  }
+  return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe( // url contains query string with the search term
+    tap(x => x.length ?
+       this.log(`found heroes matching "${term}"`) :
+       this.log(`no heroes matching "${term}"`)),
+    catchError(this.handleError<Hero[]>('searchHeroes', []))
+  );
+}
+
   constructor(private messageService: MessageService, private http: HttpClient) { }
 }
 
@@ -78,3 +92,8 @@ deleteHero(id: number): Observable<Hero> { // remove hero from server - DELETE
 // NOTES // 
 
   //   const hero = HEROES.find(h => h.id === id)!; // Exclamation point means a null won't be returned
+
+  // A provider is something that can create or deliver a service --> in the above, it instatiates the HeroService class to provide the service. In the above, it provides
+  // the service at root level. Angular creates a single shared instance of HeroService and injects into any class that asks for it.
+
+  // OnInit (interfact) --> declares ngOnInit() method --> called when component is initiliased

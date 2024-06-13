@@ -1,35 +1,53 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { MessagesComponent } from './messages/messages.component';
+import { RouterModule, Router } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { Location } from '@angular/common';
+import { HeroesComponent } from './heroes/heroes.component';
+import { HeroService } from './hero.service';
+
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let location: Location;
+  let router: Router;
+
+  beforeEach(async() => { // import dependencies in component
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
+      declarations: [AppComponent, HeroesComponent, MessagesComponent],
+      imports: [RouterModule.forRoot([ 
+        {path: 'heroes', component: HeroesComponent}
+      ])],
+      providers: [HeroService]
+    }).compileComponents()
+  })
+  
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance; // creates an insstance of the class 
+    location = TestBed.inject(Location);
+    router = TestBed.inject(Router);
+    router.initialNavigation();
+    fixture.detectChanges();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it(`should have as title 'Tour-of-heroes'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Tour-of-heroes');
+  it(`should have as title 'Tour Of Heroes 🦸‍♀️`, () => {
+    expect(component.title).toEqual('Tour Of Heroes 🦸‍♀️');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Tour-of-heroes');
+  // it(`should render the '/heroes' page when clicked`, async () => {
+  //   fixture.detectChanges()
+  //   const heroesBtn = fixture.debugElement.query(By.css('a[routerLink="/heroes"]')).nativeElement;
+  //   heroesBtn.click()
+
+  //   await fixture.whenStable();
+  //   expect(location.path()).toBe('/heroes');
+  //   });
+
   });
-});

@@ -5,14 +5,14 @@ import { HeroService } from '../hero.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
   heroes:Hero[] = []
 
   constructor(private heroService: HeroService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void { // ngOnInit() makes call to services that only need to be used once
     this.getHeroes();
   }
 

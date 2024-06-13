@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
+// The in-memory web API is a lib that stimulates a backend server by intercepting HTTP requests
+// and providing mock data in response.
 import { Hero } from './hero';
 
 @Injectable({
